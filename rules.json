@@ -1,0 +1,91 @@
+{
+  "rules": [
+    {
+      "name": "Marketing Emails Auto-Archive",
+      "predicate": "any",
+      "conditions": [
+        {
+          "field": "from",
+          "predicate": "contains",
+          "value": "marketing"
+        },
+        {
+          "field": "subject",
+          "predicate": "contains",
+          "value": "newsletter"
+        },
+        {
+          "field": "subject",
+          "predicate": "contains",
+          "value": "unsubscribe"
+        }
+      ],
+      "actions": [
+        {
+          "type": "mark_as_read"
+        },
+        {
+          "type": "move",
+          "destination": "Marketing"
+        }
+      ]
+    },
+    {
+      "name": "Important Client Emails",
+      "predicate": "all",
+      "conditions": [
+        {
+          "field": "from",
+          "predicate": "contains",
+          "value": "client"
+        },
+        {
+          "field": "subject",
+          "predicate": "does_not_contain",
+          "value": "automated"
+        },
+        {
+          "field": "received",
+          "predicate": "less_than",
+          "value": {
+            "amount": 7,
+            "unit": "days"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "type": "mark_as_unread"
+        }
+      ]
+    },
+    {
+      "name": "Old Emails Cleanup",
+      "predicate": "all",
+      "conditions": [
+        {
+          "field": "received",
+          "predicate": "greater_than",
+          "value": {
+            "amount": 3,
+            "unit": "months"
+          }
+        },
+        {
+          "field": "subject",
+          "predicate": "does_not_contain",
+          "value": "important"
+        }
+      ],
+      "actions": [
+        {
+          "type": "mark_as_read"
+        },
+        {
+          "type": "move",
+          "destination": "Archive"
+        }
+      ]
+    }
+  ]
+}
